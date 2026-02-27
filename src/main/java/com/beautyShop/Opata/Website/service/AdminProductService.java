@@ -73,32 +73,40 @@ public class AdminProductService {
                 + saved.getSubCategory() + " | Images: " + saved.getImages().size());
 
         // ── Email all users ───────────────────────────────────
-        List<User> allUsers = userRepository.findAll();
-        if (!allUsers.isEmpty()) {
-            emailService.announceNewProductToAllUsers(allUsers, saved, admin.getShopName());
+        try {
+            List<User> allUsers = userRepository.findAll();
+            if (!allUsers.isEmpty()) {
+                emailService.announceNewProductToAllUsers(allUsers, saved, admin.getShopName());
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Email notification failed (product was saved successfully): " + e.getMessage());
         }
 
         // ── Announce on Telegram channel ──────────────────────
-        String sizes = saved.getAvailableSizes() != null && !saved.getAvailableSizes().isEmpty()
-                ? saved.getAvailableSizes().stream().map(Enum::name).collect(Collectors.joining(", "))
-                : "N/A";
-        String colors = saved.getAvailableColors() != null && !saved.getAvailableColors().isEmpty()
-                ? saved.getAvailableColors().stream().map(Enum::name).collect(Collectors.joining(", "))
-                : "N/A";
+        try {
+            String sizes = saved.getAvailableSizes() != null && !saved.getAvailableSizes().isEmpty()
+                    ? saved.getAvailableSizes().stream().map(Enum::name).collect(Collectors.joining(", "))
+                    : "N/A";
+            String colors = saved.getAvailableColors() != null && !saved.getAvailableColors().isEmpty()
+                    ? saved.getAvailableColors().stream().map(Enum::name).collect(Collectors.joining(", "))
+                    : "N/A";
 
-        telegramBotService.announceNewProduct(
-                saved.getName(),
-                saved.getDescription(),
-                saved.getFinalPrice().toString(),
-                saved.getCategory(),
-                saved.getSubCategory() != null ? saved.getSubCategory().name() : "N/A",
-                sizes,
-                colors,
-                saved.getMaterial(),
-                saved.getStyle(),
-                saved.getPrimaryImageUrl(),
-                saved.getId()
-        );
+            telegramBotService.announceNewProduct(
+                    saved.getName(),
+                    saved.getDescription(),
+                    saved.getFinalPrice().toString(),
+                    saved.getCategory(),
+                    saved.getSubCategory() != null ? saved.getSubCategory().name() : "N/A",
+                    sizes,
+                    colors,
+                    saved.getMaterial(),
+                    saved.getStyle(),
+                    saved.getPrimaryImageUrl(),
+                    saved.getId()
+            );
+        } catch (Exception e) {
+            System.err.println("⚠️ Telegram notification failed (product was saved successfully): " + e.getMessage());
+        }
 
         return mapToProductResponse(saved);
     }
@@ -310,26 +318,34 @@ public class AdminProductService {
                 + saved.getCategory() + " | Images: " + saved.getImages().size());
 
         // ── Email all users ───────────────────────────────────
-        List<User> allUsers = userRepository.findAll();
-        if (!allUsers.isEmpty()) {
-            emailService.announceNewGeneralProductToAllUsers(allUsers, saved, admin.getShopName());
+        try {
+            List<User> allUsers = userRepository.findAll();
+            if (!allUsers.isEmpty()) {
+                emailService.announceNewGeneralProductToAllUsers(allUsers, saved, admin.getShopName());
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Email notification failed (product was saved successfully): " + e.getMessage());
         }
 
         // ── Announce on Telegram channel ──────────────────────
-        String tags = saved.getTags() != null && !saved.getTags().isEmpty()
-                ? String.join(", ", saved.getTags())
-                : "N/A";
+        try {
+            String tags = saved.getTags() != null && !saved.getTags().isEmpty()
+                    ? String.join(", ", saved.getTags())
+                    : "N/A";
 
-        telegramBotService.announceNewGeneralProduct(
-                saved.getName(),
-                saved.getDescription(),
-                saved.getFinalPrice().toString(),
-                saved.getCategory(),
-                saved.getSubCategory(),
-                tags,
-                saved.getPrimaryImageUrl(),
-                saved.getId()
-        );
+            telegramBotService.announceNewGeneralProduct(
+                    saved.getName(),
+                    saved.getDescription(),
+                    saved.getFinalPrice().toString(),
+                    saved.getCategory(),
+                    saved.getSubCategory(),
+                    tags,
+                    saved.getPrimaryImageUrl(),
+                    saved.getId()
+            );
+        } catch (Exception e) {
+            System.err.println("⚠️ Telegram notification failed (product was saved successfully): " + e.getMessage());
+        }
 
         return mapToGeneralProductResponse(saved);
     }
