@@ -14,7 +14,7 @@ public class Scheduler {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private static final String RENDER_URL = "https://billionbackend.onrender.com/ping";
+    private static final String RENDER_URL = "https://opatawebbackend.onrender.com/ping";
 
     // Ping every 5 minutes (300,000 ms)
     @Scheduled(fixedRate = 5000)
