@@ -1,0 +1,1641 @@
+
+================================================================================
+API Documentation
+================================================================================
+
+This document provides a complete overview of all API endpoints, including controllers, sample requests, test URLs, and sample responses.
+
+================================================================================
+Controller: AuthController
+================================================================================
+
+This controller handles user and admin registration and login.
+
+Endpoints:
+
+1.  **Register User**
+    *   **URL**: `POST /api/auth/user/register`
+    *   **Description**: Registers a new customer.
+    *   **Sample Request**:
+        ```json
+        {
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john.doe@example.com",
+          "password": "password123"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Registration successful! Welcome John",
+            "data": {
+                "accessToken": "your.access.token",
+                "refreshToken": "your.refresh.token"
+            }
+        }
+        ```
+
+2.  **Login User**
+    *   **URL**: `POST /api/auth/user/login`
+    *   **Description**: Logs in a customer.
+    *   **Sample Request**:
+        ```json
+        {
+          "email": "john.doe@example.com",
+          "password": "password123"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Login successful!",
+            "data": {
+                "accessToken": "your.access.token",
+                "refreshToken": "your.refresh.token"
+            }
+        }
+        ```
+
+3.  **Register Admin**
+    *   **URL**: `POST /api/auth/admin/register`
+    *   **Description**: Registers a new admin.
+    *   **Sample Request**:
+        ```json
+        {
+          "name": "Admin User",
+          "email": "admin@example.com",
+          "password": "adminpassword",
+          "shopName": "My Beauty Shop"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Admin registered successfully! Welcome Admin User",
+            "data": {
+                "accessToken": "your.access.token",
+                "refreshToken": "your.refresh.token"
+            }
+        }
+        ```
+
+4.  **Login Admin**
+    *   **URL**: `POST /api/auth/admin/login`
+    *   **Description**: Logs in an admin.
+    *   **Sample Request**:
+        ```json
+        {
+          "email": "admin@example.com",
+          "password": "adminpassword"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Login successful!",
+            "data": {
+                "accessToken": "your.access.token",
+                "refreshToken": "your.refresh.token"
+            }
+        }
+        ```
+
+================================================================================
+Controller: CartController
+================================================================================
+
+This controller handles the user's shopping cart. All endpoints require user authentication.
+
+Endpoints:
+
+1.  **View Cart**
+    *   **URL**: `GET /api/user/cart/`
+    *   **Description**: Returns all items in the user's cart with subtotals and grand total.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Cart retrieved",
+            "data": {
+                "items": [
+                    {
+                        "cartItemId": 1,
+                        "product": {
+                            "id": 101,
+                            "name": "Facial Cleanser",
+                            "price": 25.00
+                        },
+                        "quantity": 2,
+                        "subtotal": 50.00
+                    }
+                ],
+                "grandTotal": 50.00
+            }
+        }
+        ```
+
+2.  **Get Cart Item Count**
+    *   **URL**: `GET /api/user/cart/count`
+    *   **Description**: Returns the number of items in the cart.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": 2
+        }
+        ```
+
+3.  **Add Product to Cart**
+    *   **URL**: `POST /api/user/cart/add`
+    *   **Description**: Adds a product to the cart.
+    *   **Sample Request**:
+        ```json
+        {
+          "productId": 101,
+          "quantity": 1
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Product added to cart",
+            "data": {
+                "items": [
+                    {
+                        "cartItemId": 1,
+                        "product": {
+                            "id": 101,
+                            "name": "Facial Cleanser",
+                            "price": 25.00
+                        },
+                        "quantity": 3,
+                        "subtotal": 75.00
+                    }
+                ],
+                "grandTotal": 75.00
+            }
+        }
+        ```
+
+4.  **Update Cart Item Quantity**
+    *   **URL**: `PATCH /api/user/cart/items/{cartItemId}?quantity={quantity}`
+    *   **Description**: Updates the quantity of an item in the cart.
+    *   **Sample Request**:
+        *   URL: `/api/user/cart/items/1?quantity=5`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Cart updated",
+            "data": {
+                "items": [
+                    {
+                        "cartItemId": 1,
+                        "product": {
+                            "id": 101,
+                            "name": "Facial Cleanser",
+                            "price": 25.00
+                        },
+                        "quantity": 5,
+                        "subtotal": 125.00
+                    }
+                ],
+                "grandTotal": 125.00
+            }
+        }
+        ```
+
+5.  **Remove a Single Item from Cart**
+    *   **URL**: `DELETE /api/user/cart/items/{cartItemId}`
+    *   **Description**: Removes a single item from the cart.
+    *   **Sample Request**:
+        *   URL: `/api/user/cart/items/1`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Item removed from cart",
+            "data": {
+                "items": [],
+                "grandTotal": 0.00
+            }
+        }
+        ```
+
+6.  **Clear Entire Cart**
+    *   **URL**: `DELETE /api/user/cart/clear`
+    *   **Description**: Removes all items from the user's cart.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Cart cleared successfully",
+            "data": null
+        }
+        ```
+
+================================================================================
+Controller: UserChatController
+================================================================================
+
+This controller handles chat functionalities for authenticated users.
+
+Endpoints:
+
+1.  **Start a Product Enquiry Chat**
+    *   **URL**: `POST /api/user/chat/product/start`
+    *   **Description**: Creates a new chat room for a product enquiry. If a chat room for the given product and user already exists, it returns the existing room.
+    *   **Sample Request**:
+        ```json
+        {
+          "productId": 123
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Chat started",
+            "data": {
+                "id": 1,
+                "type": "PRODUCT_ENQUIRY",
+                "product": {
+                    "id": 123,
+                    "name": "Sample Product",
+                    "price": 49.99
+                },
+                "user": {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                },
+                "createdAt": "2023-10-27T10:00:00Z"
+            }
+        }
+        ```
+
+2.  **Send a Message in a Chat Room**
+    *   **URL**: `POST /api/user/chat/rooms/{chatRoomId}/send`
+    *   **Description**: Sends a text, image, or video message in a specified chat room. Media files are sent as a multipart/form-data request.
+    *   **Sample Request**:
+        *   URL: `/api/user/chat/rooms/1/send`
+        *   Form Data:
+            *   `message` (part): `{"content": "Hello, I have a question about this product."}`
+            *   `media` (file, optional): `(binary content of image.jpg)`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Message sent",
+            "data": {
+                "id": 101,
+                "chatRoomId": 1,
+                "senderId": "user-uuid-123",
+                "senderType": "USER",
+                "content": "Hello, I have a question about this product.",
+                "mediaUrl": null,
+                "mediaType": null,
+                "timestamp": "2023-10-27T10:05:00Z"
+            }
+        }
+        ```
+
+3.  **Get Full Message History for a Chat Room**
+    *   **URL**: `GET /api/user/chat/rooms/{chatRoomId}/history`
+    *   **Description**: Retrieves the complete message history for a given chat room.
+    *   **Sample Request**:
+        *   URL: `/api/user/chat/rooms/1/history`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "id": 101,
+                    "chatRoomId": 1,
+                    "senderId": "user-uuid-123",
+                    "senderType": "USER",
+                    "content": "Hello, I have a question about this product.",
+                    "mediaUrl": null,
+                    "mediaType": null,
+                    "timestamp": "2023-10-27T10:05:00Z"
+                },
+                {
+                    "id": 102,
+                    "chatRoomId": 1,
+                    "senderId": "admin-uuid-456",
+                    "senderType": "ADMIN",
+                    "content": "Hi there! How can I help you?",
+                    "mediaUrl": null,
+                    "mediaType": null,
+                    "timestamp": "2023-10-27T10:06:00Z"
+                }
+            ]
+        }
+        ```
+
+4.  **Get a Chat Room by ID**
+    *   **URL**: `GET /api/user/chat/rooms/{chatRoomId}`
+    *   **Description**: Retrieves details of a specific chat room by its ID.
+    *   **Sample Request**:
+        *   URL: `/api/user/chat/rooms/1`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "id": 1,
+                "type": "PRODUCT_ENQUIRY",
+                "product": {
+                    "id": 123,
+                    "name": "Sample Product",
+                    "price": 49.99
+                },
+                "user": {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                },
+                "createdAt": "2023-10-27T10:00:00Z"
+            }
+        }
+        ```
+
+5.  **Get All Chat Rooms for This User**
+    *   **URL**: `GET /api/user/chat/rooms`
+    *   **Description**: Retrieves a list of all chat rooms the authenticated user is a part of.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "id": 1,
+                    "type": "PRODUCT_ENQUIRY",
+                    // ... other chat room details
+                },
+                {
+                    "id": 2,
+                    "type": "ORDER_SUPPORT",
+                    // ... other chat room details
+                }
+            ]
+        }
+        ```
+
+6.  **Get Product Enquiry Chats for This User**
+    *   **URL**: `GET /api/user/chat/rooms/products`
+    *   **Description**: Retrieves a list of product enquiry chat rooms for the user.
+    *   **Sample Response**: (Similar structure to "Get All Chat Rooms", but filtered by type)
+
+7.  **Get Order Chats for This User**
+    *   **URL**: `GET /api/user/chat/rooms/orders`
+    *   **Description**: Retrieves a list of order support chat rooms for the user.
+    *   **Sample Response**: (Similar structure to "Get All Chat Rooms", but filtered by type)
+
+8.  **Get Delivery Chats for This User**
+    *   **URL**: `GET /api/user/chat/rooms/deliveries`
+    *   **Description**: Retrieves a list of delivery support chat rooms for the user.
+    *   **Sample Response**: (Similar structure to "Get All Chat Rooms", but filtered by type)
+
+9.  **Delete a Message**
+    *   **URL**: `DELETE /api/user/chat/messages/{messageId}`
+    *   **Description**: Deletes a message sent by the authenticated user. Users cannot delete messages sent by others.
+    *   **Sample Request**:
+        *   URL: `/api/user/chat/messages/101`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Message deleted successfully",
+            "data": null
+        }
+        ```
+
+================================================================================
+Controller: AdminChatController
+================================================================================
+
+This controller handles chat functionalities for authenticated admins.
+
+Endpoints:
+
+1.  **Open a Chat About an Order**
+    *   **URL**: `POST /api/admin/chat/order/{orderId}/start`
+    *   **Description**: Creates a new chat room concerning a specific order or returns the existing one. The user is notified.
+    *   **Sample Request**:
+        *   URL: `/api/admin/chat/order/101/start`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Order chat opened",
+            "data": {
+                "id": 2,
+                "type": "ORDER_SUPPORT",
+                "order": {
+                    "id": 101,
+                    "orderDate": "2023-10-26T14:00:00Z",
+                    "status": "PENDING"
+                },
+                "user": {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                },
+                "createdAt": "2023-10-27T11:00:00Z"
+            }
+        }
+        ```
+
+2.  **Open a Chat About a Delivery**
+    *   **URL**: `POST /api/admin/chat/delivery/{deliveryId}/start`
+    *   **Description**: Creates a new chat room concerning a specific delivery or returns the existing one. The user is notified.
+    *   **Sample Request**:
+        *   URL: `/api/admin/chat/delivery/201/start`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Delivery chat opened",
+            "data": {
+                "id": 3,
+                "type": "DELIVERY_SUPPORT",
+                "delivery": {
+                    "id": 201,
+                    "status": "SHIPPED"
+                },
+                "user": {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                },
+                "createdAt": "2023-10-27T12:00:00Z"
+            }
+        }
+        ```
+
+3.  **Send a Message to a User**
+    *   **URL**: `POST /api/admin/chat/rooms/{chatRoomId}/send`
+    *   **Description**: Sends a text, image, or video message to a user in a specific chat room.
+    *   **Sample Request**:
+        *   URL: `/api/admin/chat/rooms/1/send`
+        *   Form Data:
+            *   `message` (part): `{"content": "Hi there! How can I help you?"}`
+            *   `media` (file, optional): `(binary content of video.mp4)`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Message sent",
+            "data": {
+                "id": 102,
+                "chatRoomId": 1,
+                "senderId": "admin-uuid-456",
+                "senderType": "ADMIN",
+                "content": "Hi there! How can I help you?",
+                "mediaUrl": "http://cloudinary.com/video.mp4",
+                "mediaType": "VIDEO",
+                "timestamp": "2023-10-27T10:06:00Z"
+            }
+        }
+        ```
+
+4.  **Get Full Message History for a Chat Room**
+    *   **URL**: `GET /api/admin/chat/rooms/{chatRoomId}/history`
+    *   **Description**: Retrieves the complete message history for a given chat room.
+    *   **Sample Request**:
+        *   URL: `/api/admin/chat/rooms/1/history`
+    *   **Sample Response**: (Same as `UserChatController.getChatHistory`)
+
+5.  **Get a Chat Room by ID**
+    *   **URL**: `GET /api/admin/chat/rooms/{chatRoomId}`
+    *   **Description**: Retrieves details of a specific chat room by its ID.
+    *   **Sample Request**:
+        *   URL: `/api/admin/chat/rooms/1`
+    *   **Sample Response**: (Same as `UserChatController.getChatRoomById`)
+
+6.  **Get All Chat Rooms for This Admin**
+    *   **URL**: `GET /api/admin/chat/rooms`
+    *   **Description**: Retrieves a list of all chat rooms assigned to the authenticated admin.
+    *   **Sample Response**: (Similar structure to `UserChatController.getUserChatRooms`)
+
+7.  **Get All Order Chats for This Admin**
+    *   **URL**: `GET /api/admin/chat/rooms/orders`
+    *   **Description**: Retrieves a list of all order support chat rooms assigned to the admin.
+    *   **Sample Response**: (Similar structure, filtered by type)
+
+8.  **Get All Delivery Chats for This Admin**
+    *   **URL**: `GET /api/admin/chat/rooms/deliveries`
+    *   **Description**: Retrieves a list of all delivery support chat rooms assigned to the admin.
+    *   **Sample Response**: (Similar structure, filtered by type)
+
+9.  **Delete a Message**
+    *   **URL**: `DELETE /api/admin/chat/messages/{messageId}`
+    *   **Description**: Deletes a message sent by the authenticated admin.
+    *   **Sample Request**:
+        *   URL: `/api/admin/chat/messages/102`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Message deleted successfully",
+            "data": null
+        }
+        ```
+
+================================================================================
+Controller: AdminUserController
+================================================================================
+
+This controller provides administrative functionalities for managing customer accounts. All endpoints require admin authentication.
+
+Endpoints:
+
+1.  **Get All Users**
+    *   **URL**: `GET /api/admin/users`
+    *   **Description**: Returns the total count and a list of all registered customer accounts.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "totalUsers": 2,
+                "users": [
+                    {
+                        "id": "user-uuid-123",
+                        "firstName": "John",
+                        "lastName": "Doe",
+                        "email": "john.doe@example.com",
+                        "createdAt": "2023-01-15T10:00:00Z"
+                    },
+                    {
+                        "id": "user-uuid-456",
+                        "firstName": "Jane",
+                        "lastName": "Smith",
+                        "email": "jane.smith@example.com",
+                        "createdAt": "2023-02-20T11:30:00Z"
+                    }
+                ]
+            }
+        }
+        ```
+
+2.  **Get a Single User by ID**
+    *   **URL**: `GET /api/admin/users/{userId}`
+    *   **Description**: Retrieves the details of a specific user by their ID.
+    *   **Sample Request**:
+        *   URL: `/api/admin/users/user-uuid-123`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "id": "user-uuid-123",
+                "firstName": "John",
+                "lastName": "Doe",
+                "email": "john.doe@example.com",
+                "createdAt": "2023-01-15T10:00:00Z"
+            }
+        }
+        ```
+
+3.  **Search Users by Email**
+    *   **URL**: `GET /api/admin/users/search/email?email={email}`
+    *   **Description**: Searches for users whose email addresses match the provided query.
+    *   **Sample Request**:
+        *   URL: `/api/admin/users/search/email?email=john.doe@example.com`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "email": "john.doe@example.com",
+                    "createdAt": "2023-01-15T10:00:00Z"
+                }
+            ]
+        }
+        ```
+
+4.  **Search Users by Name**
+    *   **URL**: `GET /api/admin/users/search/name?name={name}`
+    *   **Description**: Searches for users whose first or last names match the provided query.
+    *   **Sample Request**:
+        *   URL: `/api/admin/users/search/name?name=John`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "email": "john.doe@example.com",
+                    "createdAt": "2023-01-15T10:00:00Z"
+                }
+            ]
+        }
+        ```
+
+5.  **Remove a User**
+    *   **URL**: `DELETE /api/admin/users/{userId}`
+    *   **Description**: Permanently deletes a customer account.
+    *   **Sample Request**:
+        *   URL: `/api/admin/users/user-uuid-123`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "User user-uuid-123 removed successfully.",
+            "data": null
+        }
+        ```
+
+6.  **Get Admin Profile**
+    *   **URL**: `GET /api/admin/users/admin/profile`
+    *   **Description**: Returns the profile details of the authenticated admin (shop owner).
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "id": "admin-uuid-456",
+                "name": "Admin User",
+                "email": "admin@example.com",
+                "shopName": "My Beauty Shop",
+                "createdAt": "2023-01-01T09:00:00Z"
+            }
+        }
+        ```
+
+================================================================================
+Controller: UserOrderController
+================================================================================
+
+This controller provides functionalities for authenticated users to place and view their own orders.
+
+Endpoints:
+
+1.  **Place an Order from Cart**
+    *   **URL**: `POST /api/user/orders/place`
+    *   **Description**: Converts the user's current cart into a new order. The cart is automatically cleared after a successful order placement.
+    *   **Sample Request**:
+        ```json
+        {
+          "shippingAddress": "123 Main St, Anytown, USA",
+          "paymentMethod": "CREDIT_CARD"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Order placed successfully! Order #1001",
+            "data": {
+                "orderId": 1001,
+                "userId": "user-uuid-123",
+                "orderDate": "2023-10-27T15:00:00Z",
+                "status": "PENDING",
+                "totalAmount": 75.00,
+                "shippingAddress": "123 Main St, Anytown, USA",
+                "paymentMethod": "CREDIT_CARD",
+                "orderItems": [
+                    {
+                        "orderItemId": 201,
+                        "productId": 101,
+                        "productName": "Facial Cleanser",
+                        "quantity": 3,
+                        "price": 25.00,
+                        "subtotal": 75.00
+                    }
+                ]
+            }
+        }
+        ```
+
+2.  **Get All My Orders**
+    *   **URL**: `GET /api/user/orders/`
+    *   **Description**: Returns a list of all orders placed by the logged-in user.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "orderId": 1001,
+                    "userId": "user-uuid-123",
+                    "orderDate": "2023-10-27T15:00:00Z",
+                    "status": "PENDING",
+                    "totalAmount": 75.00,
+                    "shippingAddress": "123 Main St, Anytown, USA",
+                    "paymentMethod": "CREDIT_CARD",
+                    "orderItems": [
+                        {
+                            "orderItemId": 201,
+                            "productId": 101,
+                            "productName": "Facial Cleanser",
+                            "quantity": 3,
+                            "price": 25.00,
+                            "subtotal": 75.00
+                        }
+                    ]
+                },
+                {
+                    "orderId": 1002,
+                    "userId": "user-uuid-123",
+                    "orderDate": "2023-10-20T10:00:00Z",
+                    "status": "DELIVERED",
+                    "totalAmount": 50.00,
+                    "shippingAddress": "123 Main St, Anytown, USA",
+                    "paymentMethod": "PAYPAL",
+                    "orderItems": [
+                        {
+                            "orderItemId": 202,
+                            "productId": 102,
+                            "productName": "Moisturizer",
+                            "quantity": 1,
+                            "price": 50.00,
+                            "subtotal": 50.00
+                        }
+                    ]
+                }
+            ]
+        }
+        ```
+
+3.  **Get a Specific Order**
+    *   **URL**: `GET /api/user/orders/{orderId}`
+    *   **Description**: Retrieves the details of a single order, provided it belongs to the authenticated user.
+    *   **Sample Request**:
+        *   URL: `/api/user/orders/1001`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "orderId": 1001,
+                "userId": "user-uuid-123",
+                "orderDate": "2023-10-27T15:00:00Z",
+                "status": "PENDING",
+                "totalAmount": 75.00,
+                "shippingAddress": "123 Main St, Anytown, USA",
+                "paymentMethod": "CREDIT_CARD",
+                "orderItems": [
+                    {
+                        "orderItemId": 201,
+                        "productId": 101,
+                        "productName": "Facial Cleanser",
+                        "quantity": 3,
+                        "price": 25.00,
+                        "subtotal": 75.00
+                    }
+                ]
+            }
+        }
+        ```
+
+================================================================================
+Controller: AdminOrderController
+================================================================================
+
+This controller provides a comprehensive set of endpoints for administrators to manage and view all customer orders. All endpoints require admin authentication.
+
+Endpoints:
+
+### Status Management
+
+1.  **Update Order Status**
+    *   **URL**: `PATCH /api/admin/orders/{orderId}/status?status={status}`
+    *   **Description**: Updates the status of an order. Valid transitions are typically PENDING → CONFIRMED → SHIPPED → DELIVERED.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/1001/status?status=CONFIRMED`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Order status updated to CONFIRMED",
+            "data": {
+                "orderId": 1001,
+                "status": "CONFIRMED",
+                // ... other order details
+            }
+        }
+        ```
+
+2.  **Cancel an Order**
+    *   **URL**: `PATCH /api/admin/orders/{orderId}/cancel`
+    *   **Description**: Marks an order as CANCELLED. Delivered orders cannot be cancelled.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/1001/cancel`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Order #1001 cancelled successfully",
+            "data": {
+                "orderId": 1001,
+                "status": "CANCELLED",
+                // ... other order details
+            }
+        }
+        ```
+
+### Viewing All Orders
+
+3.  **Get All Orders**
+    *   **URL**: `GET /api/admin/orders`
+    *   **Description**: Retrieves a list of all orders, sorted with the newest first.
+    *   **Sample Response**: (Similar structure to `UserOrderController.getMyOrders`)
+
+4.  **Get Order by ID**
+    *   **URL**: `GET /api/admin/orders/{orderId}`
+    *   **Description**: Retrieves a single order by its unique ID.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/1001`
+    *   **Sample Response**: (Similar structure to `UserOrderController.getMyOrderById`)
+
+5.  **Get Recent Orders**
+    *   **URL**: `GET /api/admin/orders/recent?limit={limit}`
+    *   **Description**: Returns the N most recent orders. Defaults to 10 if no limit is specified.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/recent?limit=5`
+    *   **Sample Response**: (A list of 5 most recent orders)
+
+6.  **Get Highest Value Orders**
+    *   **URL**: `GET /api/admin/orders/highest-value?limit={limit}`
+    *   **Description**: Returns orders sorted by total amount in descending order. Defaults to 10 if no limit is specified.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/highest-value?limit=5`
+    *   **Sample Response**: (A list of the 5 highest value orders)
+
+### Viewing Orders by Status
+
+7.  **Get Orders by Status**
+    *   **URL**: `GET /api/admin/orders/status/{status}`
+    *   **Description**: Retrieves all orders that match a specific status (e.g., PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED).
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/status/PENDING`
+    *   **Sample Response**: (A list of all orders with "PENDING" status)
+
+8.  **Convenience Endpoints for Status**
+    *   `GET /api/admin/orders/pending`
+    *   `GET /api/admin/orders/confirmed`
+    *   `GET /api/admin/orders/shipped`
+    *   `GET /api/admin/orders/delivered`
+    *   `GET /api/admin/orders/cancelled`
+
+### Viewing Orders by Date
+
+9.  **Get Today's Orders**
+    *   **URL**: `GET /api/admin/orders/today`
+    *   **Description**: Retrieves all orders placed today.
+
+10. **Get Orders This Week**
+    *   **URL**: `GET /api/admin/orders/this-week`
+    *   **Description**: Retrieves all orders placed in the last 7 days.
+
+11. **Get Orders This Month**
+    *   **URL**: `GET /api/admin/orders/this-month`
+    *   **Description**: Retrieves all orders placed in the current calendar month.
+
+12. **Get Orders by Date Range**
+    *   **URL**: `GET /api/admin/orders/date-range?from={from}&to={to}`
+    *   **Description**: Retrieves orders within a specific date and time range.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/date-range?from=2023-10-01T00:00:00&to=2023-10-31T23:59:59`
+
+### Viewing Orders by User
+
+13. **Get All Orders for a Specific User**
+    *   **URL**: `GET /api/admin/orders/user/{userId}`
+    *   **Description**: Retrieves all orders placed by a specific user.
+    *   **Sample Request**:
+        *   URL: `/api/admin/orders/user/user-uuid-123`
+
+### Dashboard Summaries
+
+14. **Get Order Dashboard Summary**
+    *   **URL**: `GET /api/admin/orders/summary`
+    *   **Description**: Returns key metrics like total revenue, total orders, and counts for each order status.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "totalRevenue": 15000.75,
+                "totalOrders": 150,
+                "pendingCount": 10,
+                "confirmedCount": 25,
+                "shippedCount": 30,
+                "deliveredCount": 80,
+                "cancelledCount": 5
+            }
+        }
+        ```
+
+15. **Get Order Count Per Day (Last 7 Days)**
+    *   **URL**: `GET /api/admin/orders/summary/per-day`
+    *   **Description**: Returns the number of orders placed on each of the last 7 days.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "2023-10-27": 12,
+                "2023-10-26": 8,
+                "2023-10-25": 15,
+                "2023-10-24": 7,
+                "2023-10-23": 11,
+                "2023-10-22": 5,
+                "2023-10-21": 9
+            }
+        }
+        ```
+
+================================================================================
+Controller: UserProductController
+================================================================================
+
+This controller provides public endpoints for browsing, searching, and filtering products. It is divided into two main sections: "Clothing Products" and "General Products". No authentication is required for these endpoints.
+
+---
+### Clothing Products
+---
+
+Endpoints for browsing clothing-specific items.
+
+#### Browse Clothing Products
+
+1.  **Get All Clothing Products**
+    *   **URL**: `GET /api/products/clothing`
+    *   **Description**: Retrieves a list of all clothing products, including those that are hidden or out of stock.
+
+2.  **Get All Available Clothing Products**
+    *   **URL**: `GET /api/products/clothing/available`
+    *   **Description**: Retrieves clothing products that are in stock and not hidden.
+
+3.  **Get In-Stock Clothing Products**
+    *   **URL**: `GET /api/products/clothing/in-stock`
+    *   **Description**: Retrieves clothing products with a stock quantity greater than 0.
+
+4.  **Get Discounted Clothing Products**
+    *   **URL**: `GET /api/products/clothing/discounted`
+    *   **Description**: Retrieves clothing products that have a discount applied.
+
+5.  **Get a Single Clothing Product by ID**
+    *   **URL**: `GET /api/products/clothing/{id}`
+    *   **Description**: Retrieves the details of a specific clothing product.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "id": 1,
+                "name": "Classic T-Shirt",
+                "description": "A comfortable and stylish t-shirt.",
+                "price": 29.99,
+                "stock": 100,
+                "category": "Tops",
+                "subCategory": "T-SHIRTS",
+                "brand": "FashionBrand",
+                "material": "Cotton",
+                "sizes": ["S", "M", "L"],
+                "colors": ["RED", "BLUE"],
+                "images": ["image1.jpg", "image2.jpg"]
+            }
+        }
+        ```
+
+#### Filter Clothing Products
+
+6.  **Filter by Category**: `GET /api/products/clothing/category/{category}`
+7.  **Filter by Sub-Category**: `GET /api/products/clothing/subcategory/{subCategory}` (e.g., T_SHIRTS, JEANS)
+8.  **Filter by Brand**: `GET /api/products/clothing/brand/{brand}`
+9.  **Filter by Size**: `GET /api/products/clothing/size/{size}` (e.g., S, M, L, XL)
+10. **Filter by Color**: `GET /api/products/clothing/color/{color}` (e.g., RED, BLUE)
+11. **Filter by Material**: `GET /api/products/clothing/material/{material}`
+12. **Filter by Price Range**: `GET /api/products/clothing/price-range?min={min}&max={max}`
+13. **Filter by Category and Price Range**: `GET /api/products/clothing/filter?category={category}&min={min}&max={max}`
+
+#### Search Clothing Products
+
+14. **Search by Name**: `GET /api/products/clothing/search?name={name}`
+15. **Search by Keyword**: `GET /api/products/clothing/search/keyword?keyword={keyword}` (searches name, description, brand, category)
+16. **Search by Name and Category**: `GET /api/products/clothing/search/name-category?name={name}&category={category}`
+17. **Search by Name and Brand**: `GET /api/products/clothing/search/name-brand?name={name}&brand={brand}`
+
+#### Clothing Product Metadata
+
+18. **Get All Categories**: `GET /api/products/clothing/meta/categories`
+19. **Get All Brands**: `GET /api/products/clothing/meta/brands`
+20. **Get All Materials**: `GET /api/products/clothing/meta/materials`
+    *   **Sample Response for Metadata Endpoints**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": ["Tops", "Bottoms", "Dresses"]
+        }
+        ```
+
+---
+### General Products
+---
+
+Endpoints for browsing non-clothing items.
+
+#### Browse General Products
+
+21. **Get All General Products**: `GET /api/products/general`
+22. **Get Available General Products**: `GET /api/products/general/available`
+23. **Get In-Stock General Products**: `GET /api/products/general/in-stock`
+24. **Get Discounted General Products**: `GET /api/products/general/discounted`
+25. **Get a Single General Product by ID**: `GET /api/products/general/{id}`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "id": 101,
+                "name": "Hydrating Face Cream",
+                "description": "A rich cream for daily hydration.",
+                "price": 45.00,
+                "stock": 50,
+                "category": "Skincare",
+                "subCategory": "Moisturizers",
+                "brand": "BeautyCo",
+                "tags": ["Hydration", "Daily Use"],
+                "attributes": {
+                    "SkinType": "All",
+                    "Volume": "50ml"
+                },
+                "images": ["cream1.jpg"]
+            }
+        }
+        ```
+
+#### Filter General Products
+
+26. **Filter by Category**: `GET /api/products/general/category/{category}`
+27. **Filter by Sub-Category**: `GET /api/products/general/subcategory/{subCategory}`
+28. **Filter by Brand**: `GET /api/products/general/brand/{brand}`
+29. **Filter by Tag**: `GET /api/products/general/tag/{tag}`
+30. **Filter by Price Range**: `GET /api/products/general/price-range?min={min}&max={max}`
+31. **Filter by Category and Price Range**: `GET /api/products/general/filter?category={category}&min={min}&max={max}`
+32. **Filter by Custom Attribute**: `GET /api/products/general/attribute?key={key}&value={value}` (e.g., `?key=SkinType&value=Oily`)
+
+#### Search General Products
+
+33. **Search by Name**: `GET /api/products/general/search?name={name}`
+34. **Search by Keyword**: `GET /api/products/general/search/keyword?keyword={keyword}`
+
+#### General Product Metadata
+
+35. **Get All Categories**: `GET /api/products/general/meta/categories`
+36. **Get All Sub-Categories**: `GET /api/products/general/meta/subcategories`
+37. **Get All Brands**: `GET /api/products/general/meta/brands`
+38. **Get All Tags**: `GET /api/products/general/meta/tags`
+    *   **Sample Response for Metadata Endpoints**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": ["Skincare", "Makeup", "Haircare"]
+        }
+        ```
+
+================================================================================
+Controller: UserProfileController
+================================================================================
+
+This controller provides endpoints for authenticated users to manage their own profiles.
+
+Endpoints:
+
+1.  **Get My Profile**
+    *   **URL**: `GET /api/user/profile/`
+    *   **Description**: Retrieves the profile details of the currently authenticated user.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": {
+                "id": "user-uuid-123",
+                "firstName": "John",
+                "lastName": "Doe",
+                "email": "john.doe@example.com",
+                "phoneNumber": "+1234567890",
+                "createdAt": "2023-01-15T10:00:00Z"
+            }
+        }
+        ```
+
+2.  **Update My Profile**
+    *   **URL**: `PUT /api/user/profile/`
+    *   **Description**: Updates the first name, last name, and/or phone number of the authenticated user's profile.
+    *   **Sample Request**:
+        ```json
+        {
+          "firstName": "Jonathan",
+          "lastName": "Smith",
+          "phoneNumber": "+1987654321"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Profile updated successfully",
+            "data": {
+                "id": "user-uuid-123",
+                "firstName": "Jonathan",
+                "lastName": "Smith",
+                "email": "john.doe@example.com",
+                "phoneNumber": "+1987654321",
+                "createdAt": "2023-01-15T10:00:00Z"
+            }
+        }
+        ```
+
+================================================================================
+Controller: AdminProductController
+================================================================================
+
+This controller provides a comprehensive set of endpoints for administrators to manage both "Clothing" and "General" products. All endpoints require admin authentication.
+
+---
+### Clothing Products Management
+---
+
+#### Write Operations for Clothing Products
+
+1.  **Add a New Clothing Product**
+    *   **URL**: `POST /api/admin/products/clothing`
+    *   **Description**: Creates a new clothing product. This is a multipart request that includes product data and optional images.
+    *   **Sample Request**:
+        *   Form Data:
+            *   `product` (part): `{"name": "New T-Shirt", "price": 35.0, "stock": 50, "category": "Tops", "sizes": ["M", "L"], "colors": ["BLACK"]}`
+            *   `images` (file, optional): `(binary content of image1.jpg)`
+    *   **Sample Response**: (A `ProductResponse` object for the newly created product)
+
+2.  **Update a Clothing Product**
+    *   **URL**: `PUT /api/admin/products/clothing/{productId}`
+    *   **Description**: Updates an existing clothing product. Allows for adding new images and deleting existing ones.
+    *   **Sample Request**:
+        *   URL: `/api/admin/products/clothing/1?imageIdsToDelete=3&adminId=admin-uuid-456`
+        *   Form Data:
+            *   `product` (part): `{"name": "Updated T-Shirt", "price": 32.0}`
+            *   `newImages` (file, optional): `(binary content of image3.jpg)`
+
+3.  **Replace All Images for a Clothing Product**
+    *   **URL**: `PUT /api/admin/products/clothing/{productId}/images`
+    *   **Description**: Deletes all existing images for a product and uploads a new set.
+    *   **Sample Request**:
+        *   URL: `/api/admin/products/clothing/1/images`
+        *   Form Data:
+            *   `images` (file): `(binary content of new_image.jpg)`
+
+4.  **Update Stock for a Clothing Product**
+    *   **URL**: `PATCH /api/admin/products/clothing/{productId}/stock?stock={stock}`
+    *   **Description**: Updates the stock quantity for a specific product.
+    *   **Sample Request**:
+        *   URL: `/api/admin/products/clothing/1/stock?stock=75`
+
+5.  **Toggle Availability of a Clothing Product**
+    *   **URL**: `PATCH /api/admin/products/clothing/{productId}/toggle-availability`
+    *   **Description**: Hides or shows a product in the public catalog.
+
+6.  **Delete a Clothing Product**
+    *   **URL**: `DELETE /api/admin/products/clothing/{productId}`
+    *   **Description**: Permanently removes a product and its associated images.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Product with ID 1 removed successfully.",
+            "data": null
+        }
+        ```
+
+#### Read Operations for Clothing Products
+
+These endpoints are similar to the public `UserProductController` but may return all products, including hidden ones.
+
+*   `GET /api/admin/products/clothing`: Get all clothing products.
+*   `GET /api/admin/products/clothing/mine`: Get clothing products added by the current admin.
+*   `GET /api/admin/products/clothing/{productId}`: Get a specific product by ID.
+*   `GET /api/admin/products/clothing/search?name={name}`: Search by name.
+*   ... (and all other filter/search/meta endpoints from `UserProductController`)
+
+---
+### General Products Management
+---
+
+#### Write Operations for General Products
+
+7.  **Add a New General Product**
+    *   **URL**: `POST /api/admin/products/general`
+    *   **Description**: Creates a new general (non-clothing) product.
+    *   **Sample Request**:
+        *   Form Data:
+            *   `product` (part): `{"name": "New Face Serum", "price": 55.0, "stock": 30, "category": "Skincare", "tags": ["Anti-Aging"]}`
+            *   `images` (file, optional): `(binary content of serum.jpg)`
+    *   **Sample Response**: (A `GeneralProductResponse` object for the new product)
+
+8.  **Update a General Product**
+    *   **URL**: `PUT /api/admin/products/general/{productId}`
+    *   **Description**: Updates an existing general product.
+
+9.  **Replace All Images for a General Product**
+    *   **URL**: `PUT /api/admin/products/general/{productId}/images`
+    *   **Description**: Replaces all images for a general product.
+
+10. **Update Stock for a General Product**
+    *   **URL**: `PATCH /api/admin/products/general/{productId}/stock?stock={stock}`
+    *   **Description**: Updates the stock for a general product.
+
+11. **Toggle Availability of a General Product**
+    *   **URL**: `PATCH /api/admin/products/general/{productId}/toggle-availability`
+    *   **Description**: Hides or shows a general product.
+
+12. **Delete a General Product**
+    *   **URL**: `DELETE /api/admin/products/general/{productId}`
+    *   **Description**: Permanently removes a general product.
+
+#### Read Operations for General Products
+
+These endpoints mirror the public ones but are for administrative purposes.
+
+*   `GET /api/admin/products/general`: Get all general products.
+*   `GET /api/admin/products/general/mine?adminId={adminId}`: Get products by a specific admin.
+*   `GET /api/admin/products/general/{productId}`: Get a specific product by ID.
+*   ... (and all other filter/search/meta endpoints from `UserProductController`)
+
+================================================================================
+Controller: UserDeliveryController
+================================================================================
+
+This controller provides endpoints for authenticated users to request and manage their deliveries.
+
+Endpoints:
+
+1.  **Request a Delivery**
+    *   **URL**: `POST /api/user/deliveries/request`
+    *   **Description**: Allows a user to submit a delivery request for one of their completed orders. An order can only have one delivery request.
+    *   **Sample Request**:
+        ```json
+        {
+          "orderId": 1001,
+          "deliveryAddress": "456 Oak Ave, Othertown, USA",
+          "contactNumber": "+15551234567"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Delivery request submitted successfully!",
+            "data": {
+                "id": 501,
+                "orderId": 1001,
+                "userId": "user-uuid-123",
+                "status": "PENDING",
+                "deliveryAddress": "456 Oak Ave, Othertown, USA",
+                "contactNumber": "+15551234567",
+                "requestDate": "2023-10-28T10:00:00Z",
+                "trackingNumber": null,
+                "estimatedDeliveryDate": null
+            }
+        }
+        ```
+
+2.  **Get All My Deliveries**
+    *   **URL**: `GET /api/user/deliveries/`
+    *   **Description**: Retrieves a list of all delivery requests made by the authenticated user.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "id": 501,
+                    "orderId": 1001,
+                    "status": "PENDING",
+                    // ... other delivery details
+                },
+                {
+                    "id": 502,
+                    "orderId": 1003,
+                    "status": "SHIPPED",
+                    "trackingNumber": "TRACK502XYZ",
+                    // ... other delivery details
+                }
+            ]
+        }
+        ```
+
+3.  **Get a Specific Delivery**
+    *   **URL**: `GET /api/user/deliveries/{deliveryId}`
+    *   **Description**: Retrieves the details of a single delivery, provided it belongs to the authenticated user.
+    *   **Sample Request**:
+        *   URL: `/api/user/deliveries/501`
+    *   **Sample Response**: (A single delivery response object, similar to the one in "Request a Delivery")
+
+4.  **Track Delivery by Tracking Number**
+    *   **URL**: `GET /api/user/deliveries/track/{trackingNumber}`
+    *   **Description**: A public endpoint to track a delivery using its tracking number. No authentication is required.
+    *   **Sample Request**:
+        *   URL: `/api/user/deliveries/track/TRACK502XYZ`
+    *   **Sample Response**: (A single delivery response object)
+
+5.  **Cancel a Delivery**
+    *   **URL**: `PATCH /api/user/deliveries/{deliveryId}/cancel`
+    *   **Description**: Allows a user to cancel their delivery request, but only if the delivery has not yet been picked up or shipped.
+    *   **Sample Request**:
+        *   URL: `/api/user/deliveries/501/cancel`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Delivery cancelled",
+            "data": {
+                "id": 501,
+                "status": "CANCELLED",
+                // ... other delivery details
+            }
+        }
+        ```
+
+================================================================================
+Controller: AdminDeliveryController
+================================================================================
+
+This controller provides a comprehensive set of endpoints for administrators to manage and track deliveries. All endpoints require admin authentication.
+
+Endpoints:
+
+1.  **Get All Deliveries**
+    *   **URL**: `GET /api/admin/deliveries`
+    *   **Description**: Retrieves a list of all delivery requests.
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": null,
+            "data": [
+                {
+                    "id": 501,
+                    "orderId": 1001,
+                    "userId": "user-uuid-123",
+                    "status": "PENDING",
+                    "deliveryAddress": "456 Oak Ave, Othertown, USA",
+                    "contactNumber": "+15551234567",
+                    "requestDate": "2023-10-28T10:00:00Z",
+                    "trackingNumber": null,
+                    "estimatedDeliveryDate": null,
+                    "courier": null,
+                    "deliveryFee": null
+                },
+                {
+                    "id": 502,
+                    "orderId": 1003,
+                    "userId": "user-uuid-456",
+                    "status": "SHIPPED",
+                    "deliveryAddress": "789 Pine St, Anytown, USA",
+                    "contactNumber": "+15559876543",
+                    "requestDate": "2023-10-27T09:00:00Z",
+                    "trackingNumber": "TRACK502XYZ",
+                    "estimatedDeliveryDate": "2023-10-30T17:00:00Z",
+                    "courier": "FedEx",
+                    "deliveryFee": 10.50
+                }
+            ]
+        }
+        ```
+
+2.  **Get a Single Delivery by ID**
+    *   **URL**: `GET /api/admin/deliveries/{deliveryId}`
+    *   **Description**: Retrieves the details of a specific delivery by its ID.
+    *   **Sample Request**:
+        *   URL: `/api/admin/deliveries/501`
+    *   **Sample Response**: (A single delivery response object, similar to the one above)
+
+3.  **Get Deliveries by Status**
+    *   **URL**: `GET /api/admin/deliveries/status/{status}`
+    *   **Description**: Retrieves a list of deliveries filtered by their current status (e.g., PENDING, SHIPPED, DELIVERED, CANCELLED).
+    *   **Sample Request**:
+        *   URL: `/api/admin/deliveries/status/PENDING`
+    *   **Sample Response**: (A list of deliveries with "PENDING" status)
+
+4.  **Get All Active Deliveries**
+    *   **URL**: `GET /api/admin/deliveries/active`
+    *   **Description**: Retrieves deliveries that are not yet delivered or cancelled.
+
+5.  **Get Overdue Deliveries**
+    *   **URL**: `GET /api/admin/deliveries/overdue`
+    *   **Description**: Retrieves deliveries whose estimated delivery date has passed.
+
+6.  **Get All Deliveries Assigned to a Specific Admin**
+    *   **URL**: `GET /api/admin/deliveries/assigned`
+    *   **Description**: Retrieves deliveries that have been assigned to the currently authenticated admin.
+
+7.  **Get the Delivery for a Specific Order**
+    *   **URL**: `GET /api/admin/deliveries/order/{orderId}`
+    *   **Description**: Retrieves the delivery details associated with a particular order ID.
+    *   **Sample Request**:
+        *   URL: `/api/admin/deliveries/order/1001`
+
+8.  **Update Delivery Status**
+    *   **URL**: `PATCH /api/admin/deliveries/{deliveryId}/status`
+    *   **Description**: Updates the status of a delivery. Can also set tracking information, courier, fee, and estimated delivery date. A message can be sent to the user via the delivery chat.
+    *   **Sample Request**:
+        *   URL: `/api/admin/deliveries/501/status`
+        ```json
+        {
+          "status": "SHIPPED",
+          "trackingNumber": "TRACK501ABC",
+          "courier": "DHL",
+          "deliveryFee": 15.00,
+          "estimatedDeliveryDate": "2023-10-30T14:00:00Z",
+          "messageToUser": "Your order has been shipped!"
+        }
+        ```
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Delivery #501 updated to SHIPPED",
+            "data": {
+                "id": 501,
+                "status": "SHIPPED",
+                "trackingNumber": "TRACK501ABC",
+                "courier": "DHL",
+                "deliveryFee": 15.00,
+                "estimatedDeliveryDate": "2023-10-30T14:00:00Z",
+                // ... other delivery details
+            }
+        }
+        ```
+
+9.  **Open a Chat with the Customer About a Delivery**
+    *   **URL**: `POST /api/admin/deliveries/{deliveryId}/chat`
+    *   **Description**: Creates a new chat room for a specific delivery (or returns the existing one) to allow the admin to communicate with the customer.
+    *   **Sample Request**:
+        *   URL: `/api/admin/deliveries/501/chat`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Delivery chat opened",
+            "data": {
+                "id": 4,
+                "type": "DELIVERY_SUPPORT",
+                "delivery": {
+                    "id": 501,
+                    "status": "SHIPPED"
+                },
+                "user": {
+                    "id": "user-uuid-123",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                },
+                "createdAt": "2023-10-28T11:00:00Z"
+            }
+        }
+        ```
+
+10. **Cancel a Delivery (Admin)**
+    *   **URL**: `PATCH /api/admin/deliveries/{deliveryId}/cancel`
+    *   **Description**: Allows an admin to cancel a delivery, typically if it has not yet been picked up.
+    *   **Sample Request**:
+        *   URL: `/api/admin/deliveries/501/cancel`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Delivery #501 cancelled",
+            "data": {
+                "id": 501,
+                "status": "CANCELLED",
+                // ... other delivery details
+            }
+        }
+        ```
+
+================================================================================
+Controller: TelegramAdminController
+================================================================================
+
+This controller provides endpoints for administrators to interact with a Telegram bot for notifications and channel announcements. All endpoints require admin authentication.
+
+Endpoints:
+
+### Admin and Channel Management
+
+1.  **Register Admin's Telegram Chat ID**
+    *   **URL**: `POST /api/admin/telegram/register?chatId={chatId}&secret={secret}`
+    *   **Description**: Links an admin's Telegram account to the bot for receiving direct notifications. The admin must first message the bot on Telegram to get their `chatId` and then use the correct `secret` provided by the system configuration.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/register?chatId=123456789&secret=my-secret-key`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Admin registration processed. Check your Telegram for confirmation.",
+            "data": null
+        }
+        ```
+
+2.  **Send a Broadcast Message to the Channel**
+    *   **URL**: `POST /api/admin/telegram/channel/broadcast?message={message}`
+    *   **Description**: Posts a general announcement to the configured public Telegram channel.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/channel/broadcast?message=Welcome to our store! Follow us for updates.`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Broadcast sent to channel successfully",
+            "data": null
+        }
+        ```
+
+3.  **Post a Sale Announcement to the Channel**
+    *   **URL**: `POST /api/admin/telegram/channel/sale?saleName={saleName}&discount={discount}&endDate={endDate}`
+    *   **Description**: Posts a formatted sale announcement to the Telegram channel.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/channel/sale?saleName=Summer Sale&discount=20%&endDate=August 31st`
+    *   **Sample Response**:
+        ```json
+        {
+            "status": "SUCCESS",
+            "message": "Sale announcement sent to channel successfully",
+            "data": null
+        }
+        ```
+
+### Manual Notifications
+
+These endpoints are for testing or re-sending notifications that are normally triggered automatically by other system events.
+
+4.  **Manually Send an Order Status Update Notification**
+    *   **URL**: `POST /api/admin/telegram/notify/order-status?customerName={...}&orderId={...}&oldStatus={...}&newStatus={...}`
+    *   **Description**: Sends a direct message to the registered admin's Telegram account about an order status change.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/notify/order-status?customerName=John Doe&orderId=101&oldStatus=PENDING&newStatus=CONFIRMED`
+
+5.  **Manually Send a New Delivery Request Notification**
+    *   **URL**: `POST /api/admin/telegram/notify/delivery-request?customerName={...}&deliveryId={...}&address={...}&city={...}`
+    *   **Description**: Notifies the admin via Telegram about a new delivery request.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/notify/delivery-request?customerName=Jane Smith&deliveryId=501&address=123 Main St&city=Anytown`
+
+6.  **Manually Send a Delivery Status Update Notification**
+    *   **URL**: `POST /api/admin/telegram/notify/delivery-status?customerName={...}&deliveryId={...}&newStatus={...}&trackingNumber={...}`
+    *   **Description**: Notifies the admin about a change in delivery status.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/notify/delivery-status?customerName=Jane Smith&deliveryId=501&newStatus=SHIPPED&trackingNumber=TRACK501ABC`
+
+### Manual Product Announcements
+
+These endpoints allow for manually triggering product announcements to the Telegram channel, which is normally done automatically when a new product is added.
+
+7.  **Manually Announce a Clothing Product**
+    *   **URL**: `POST /api/admin/telegram/channel/announce-product?name={...}&price={...}&category={...}&productId={...}`
+    *   **Description**: Posts a formatted message about a specific clothing product to the channel. Includes various optional fields for a detailed announcement.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/channel/announce-product?name=Classic T-Shirt&price=$29.99&category=Tops&sizes=S,M,L&productId=1`
+
+8.  **Manually Announce a General Product**
+    *   **URL**: `POST /api/admin/telegram/channel/announce-general-product?name={...}&price={...}&category={...}&productId={...}`
+    *   **Description**: Posts a formatted message about a general (non-clothing) product to the channel.
+    *   **Sample Request**:
+        *   URL: `/api/admin/telegram/channel/announce-general-product?name=Hydrating Face Cream&price=$45.00&category=Skincare&productId=101`
