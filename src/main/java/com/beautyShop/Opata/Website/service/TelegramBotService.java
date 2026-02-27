@@ -177,7 +177,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
             case "/start" -> { sendUserWelcome(message, chatId); return; }
             case "/help"  -> { sendUserHelp(chatId); return; }
             case "/orders" -> {
-                sendText(chatId, "📦 Visit our website to track your orders:\nhttps://yourwebsite.com/orders");
+                sendText(chatId, "📦 Visit our website to track your orders:\nhttps://esuosbeautyempires.vercel.app");
                 return;
             }
             case "/track" -> {
@@ -207,7 +207,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                         "Meanwhile you can:\n" +
                         "📦 /orders — Check your orders\n" +
                         "🖼️ /inquiry — Ask if a product is available by image\n" +
-                        "🌐 Visit us: https://yourwebsite.com",
+                        "🌐 Visit us: https://esuosbeautyempires.vercel.app",
                 ParseMode.MARKDOWN);
 
         forwardUserMessageToAdmin(message, chatId);
@@ -455,7 +455,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 🧵 Material: %s
                 💃 Style: %s
 
-                🛍️ Shop now: https://yourwebsite.com/products/%d
+                🛍️ Shop now: https://esuosbeautyempires.vercel.app/shop.html
                 """,
                 name, price, description != null ? description : "",
                 category, subCategory != null ? subCategory : "N/A",
@@ -489,7 +489,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 📂 Sub-Category: %s
                 🔖 Tags: %s
 
-                🛍️ View product: https://yourwebsite.com/general-products/%d
+                🛍️ View product: https://esuosbeautyempires.vercel.app/shop.html
                 """,
                 name, price, description != null ? description : "",
                 category, subCategory != null ? subCategory : "N/A",
@@ -601,7 +601,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 💥 Get up to *%s OFF!*
                 ⏰ Ends: %s
 
-                🛍️ Shop now: https://yourwebsite.com
+                🛍️ Shop now: https://esuosbeautyempires.vercel.app
                 """, saleName, discount, endDate);
         sendToChannel(msg);
         log.info("🔥 Sale announcement sent: {} ({})", saleName, discount);
@@ -673,7 +673,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 🖼️ /inquiry — Send a product image to ask if it's available
                 💬 Send a message — Our support team will reply
 
-                🌐 Website: https://yourwebsite.com
+                🌐 Website: https://esuosbeautyempires.vercel.app
                 """;
         sendText(chatId, msg, ParseMode.MARKDOWN);
     }

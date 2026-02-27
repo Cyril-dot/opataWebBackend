@@ -28,10 +28,8 @@ public class CorsConfig {
                 "http://192.168.8.127:8081",
                 "https://novaspace-teal.vercel.app",
                 "https://novaspace-3xjlmad36-cyril-dots-projects.vercel.app",
-                "https://billion-laptops.vercel.app",
-                "https://billion-laptops-admin.vercel.app",
-                "https://billion-laptops-admin-366n8r9uk-cyril-dots-projects.vercel.app",
-                "https://billion-laptops-admin-git-master-cyril-dots-projects.vercel.app"
+                "https://esuosbeautyempires.vercel.app",
+                "https://esuosadmin.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(
